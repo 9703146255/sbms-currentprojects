@@ -1,0 +1,5 @@
+package in.thiru.repository;
+
+public interface PaymentRepository extends jpa{
+
+}

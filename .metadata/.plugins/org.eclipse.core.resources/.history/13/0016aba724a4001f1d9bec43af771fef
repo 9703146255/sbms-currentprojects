@@ -1,0 +1,71 @@
+package in.thiru.service;
+
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
+
+@Service
+public class RazorpayService {
+
+	@Autowired
+	private RazorpayClient razorpayClient;
+
+	@Value("${razorpay.key.id}")
+	private String razorpayKeyId;
+
+	@Value("${razorpay.key.secret}")
+	private String razorpayKeySecret;
+
+	// Initialize RazorpayClient
+	public RazorpayService() {
+		try {
+			razorpayClient = new RazorpayClient(razorpayKeyId, razorpayKeySecret);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// Method to create an order
+	public Order createOrder(int amount) throws Exception {
+		// Create a JSON object with order details
+		JSONObject orderRequest = new JSONObject();
+		orderRequest.put("amount", amount * 100); // Amount in paise (100 paise = 1 INR)
+		orderRequest.put("currency", "INR");
+		orderRequest.put("payment_capture", 1);
+
+		// Create the order
+		return razorpayClient.orders.create(orderRequest);
+	}
+	
+	
+	@GetMapping("/payment")
+	public String showPaymentPage(Model model) {
+	    try {
+	        // Example customer data
+	        int amount = 1000;  // Amount in paise (1000 paise = 10 INR)
+
+	        // Create an order via the Razorpay service
+	        Order order = razorpayService.createOrder(amount);
+
+	        // Add variables to the model that will be injected into the frontend (Thymeleaf)
+	        model.addAttribute("razorpayKeyId", razorpayKeyId);  // Razorpay Key ID
+	        model.addAttribute("orderId", order.get("id"));  // Order ID returned from the backend
+	        model.addAttribute("amountInPaise", amount);  // Amount in paise (1000 paise = 10 INR)
+	        model.addAttribute("customerName", "John Doe");  // Example customer name
+	        model.addAttribute("customerEmail", "john.doe@example.com");  // Example customer email
+	        model.addAttribute("customerContact", "1234567890");  // Example customer contact
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "error";  // Return an error page if the order creation fails
+	    }
+
+	    return "razorpay-payment";  // Thymeleaf template name
+	}
+
+
+}

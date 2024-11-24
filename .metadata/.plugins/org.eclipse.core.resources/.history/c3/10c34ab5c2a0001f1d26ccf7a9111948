@@ -1,0 +1,12 @@
+package in.thiru.config;
+
+
+@Configuration
+@EnableJpaRepositories(
+    basePackages = "com.example.repository",
+    entityManagerFactoryRef = "mysqlEntityManager",
+    transactionManagerRef = "mysqlTransactionManager"
+)
+public class MySqlDBConfig {
+
+}

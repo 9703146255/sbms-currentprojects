@@ -1,0 +1,5 @@
+package in.thiru.dao;
+
+public interface H2UserRepository {
+
+}

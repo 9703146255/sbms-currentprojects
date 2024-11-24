@@ -1,0 +1,24 @@
+package in.thiru.controller;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/razorpay")
+public class RazorpayController {
+	
+	
+	 @Autowired
+	    private RazorpayService razorpayService;
+
+	    @PostMapping("/createOrder")
+	    public Order createOrder(@RequestParam int amount) {
+	        try {
+	            return razorpayService.createOrder(amount);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return null; // Handle the exception properly in your production code
+	        }
+	    }
+
+}

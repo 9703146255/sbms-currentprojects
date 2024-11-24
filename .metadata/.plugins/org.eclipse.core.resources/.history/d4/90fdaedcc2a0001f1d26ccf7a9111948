@@ -1,0 +1,12 @@
+package in.thiru.config;
+
+@Configuration
+@EnableJpaRepositories(
+    basePackages = "com.example.repository",
+    entityManagerFactoryRef = "h2EntityManager",
+    transactionManagerRef = "h2TransactionManager"
+)
+
+public class H2DBConfig {
+
+}

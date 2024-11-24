@@ -1,0 +1,9 @@
+package in.thiru.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import in.thiru.entity.MySQLUser;
+
+public interface MySQLUserRepository extends JpaRepository<MySQLUser, Long> {
+
+}

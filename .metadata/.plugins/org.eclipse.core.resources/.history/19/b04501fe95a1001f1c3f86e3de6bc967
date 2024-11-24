@@ -1,0 +1,9 @@
+package in.thiru.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import in.thiru.entity.H2User;
+
+public interface H2UserRepository extends JpaRepository<H2User, Long>{
+
+}

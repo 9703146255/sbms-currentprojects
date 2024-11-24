@@ -1,0 +1,35 @@
+package in.thiru.config;
+
+@Configuration
+@EnableJpaRepositories(
+    basePackages = "com.example.repository",
+    entityManagerFactoryRef = "mysqlEntityManager",
+    transactionManagerRef = "mysqlTransactionManager"
+)
+public class MySQLConfig {
+
+    @Primary
+    @Bean
+    @ConfigurationProperties(prefix = "spring.datasource.mysql")
+    public DataSource mysqlDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+
+    @Primary
+    @Bean
+    public LocalContainerEntityManagerFactoryBean mysqlEntityManager(
+            EntityManagerFactoryBuilder builder) {
+        return builder
+                .dataSource(mysqlDataSource())
+                .packages("com.example.entity")
+                .persistenceUnit("mysql")
+                .build();
+    }
+
+    @Primary
+    @Bean
+    public PlatformTransactionManager mysqlTransactionManager(
+            @Qualifier("mysqlEntityManager") EntityManagerFactory entityManagerFactory) {
+        return new JpaTransactionManager(entityManagerFactory);
+    }
+}

@@ -1,0 +1,5 @@
+package in.thiru.dao;
+
+public interface MySQLUserRepository extends JpaRepository<MySQLUser, Long> {} {
+
+}

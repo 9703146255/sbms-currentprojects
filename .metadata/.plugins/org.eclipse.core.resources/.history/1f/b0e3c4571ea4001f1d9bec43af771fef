@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razorpay Payment</title>
+</head>
+<body>
+    <h2>Complete your Payment</h2>
+
+    <button id="payButton">Pay with Razorpay</button>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        document.getElementById("payButton").onclick = function () {
+            var options = {
+                "key": /*[[${razorpayKeyId}]]*/,  // Razorpay Key ID from backend (Thymeleaf variable)
+                "amount": /*[[${amountInPaise}]]*/, // Amount in paise (100 paise = 1 INR)
+                "currency": "INR",
+                "order_id": /*[[${orderId}]]*/, // Order ID returned from backend (Thymeleaf variable)
+                "handler": function (response) {
+                    alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
+                },
+                "prefill": {
+                    "name": /*[[${customerName}]]*/,  // Customer name from backend
+                    "email": /*[[${customerEmail}]]*/, // Customer email from backend
+                    "contact": /*[[${customerContact}]]*/ // Customer contact from backend
+                }
+            };
+
+            var rzp = new Razorpay(options);
+            rzp.open();
+        };
+    </script>
+</body>
+</html>

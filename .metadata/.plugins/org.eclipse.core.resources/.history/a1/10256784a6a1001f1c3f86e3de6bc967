@@ -1,0 +1,12 @@
+package in.thiru.entity;
+
+public class Employee {
+	
+	 @Id
+	    private Long id;
+	    private String name;
+	    private String department;
+	    private String designation;
+	    private double salary;
+
+}

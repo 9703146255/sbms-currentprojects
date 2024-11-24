@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razorpay Payment</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <h1>Razorpay Payment</h1>
+    <p>Enter amount to create an order:</p>
+
+    <!-- Input form to enter amount -->
+    <input type="number" id="amount" placeholder="Enter amount in paise (e.g., 1000)" />
+    <button onclick="createOrderWithQuery()">Create Order (Query)</button>
+    <button onclick="createOrderWithJson()">Create Order (JSON)</button>
+
+    <script>
+        // This function sends the request with query parameters (amount as query)
+        function createOrderWithQuery() {
+            var amount = document.getElementById("amount").value;
+
+            $.ajax({
+                url: '/razorpay/createOrder',  // The endpoint
+                type: 'POST',
+                data: { amount: amount },  // Send amount as part of the query string
+                success: function(response) {
+                    console.log(response);
+                    alert("Order Created (Query) - Order ID: " + response.id);
+                },
+                error: function(err) {
+                    console.log(err);
+                    alert("Error creating order");
+                }
+            });
+        }
+
+        // This function sends the request with JSON body (amount in JSON)
+        function createOrderWithJson() {
+            var amount = document.getElementById("amount").value;
+
+            $.ajax({
+                url: '/razorpay/createOrder',  // The endpoint
+                type: 'POST',
+                contentType: 'application/json',  // Set content type to JSON
+                data: JSON.stringify({ amount: amount }),  // Send amount as JSON
+                success: function(response) {
+                    console.log(response);
+                    alert("Order Created (JSON) - Order ID: " + response.id);
+                },
+                error: function(err) {
+                    console.log(err);
+                    alert("Error creating order");
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

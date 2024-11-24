@@ -1,0 +1,47 @@
+package in.thiru.service;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class RozarPayService {
+	
+	@Value("${razorpay.key.id}")
+    private String razorpayKeyId;
+
+    @Value("${razorpay.key.secret}")
+    private String razorpayKeySecret;
+
+    private Client razorpayClient;
+
+    public RazorpayService() {
+        try {
+            this.razorpayClient = new Client(razorpayKeyId, razorpayKeySecret);
+        } catch (RazorpayException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Create Razorpay order
+    public Order createOrder(double amount) throws RazorpayException {
+        double amountInPaise = amount * 100; // Razorpay expects amount in paise (1 INR = 100 paise)
+
+        // Create an order request
+        OrderRequest request = new OrderRequest();
+        request.setAmount((long) amountInPaise);
+        request.setCurrency("INR");
+        request.setPaymentCapture(1); // Automatic payment capture
+
+        return razorpayClient.orders.create(request);
+    }
+
+    // Verify payment signature
+    public boolean verifyPayment(String paymentId, String orderId, String signature) throws RazorpayException {
+        try {
+            return razorpayClient.utility.verifyPaymentSignature(paymentId, orderId, signature);
+        } catch (RazorpayException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+}

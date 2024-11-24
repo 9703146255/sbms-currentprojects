@@ -1,0 +1,8 @@
+package in.thiru.controller;
+
+@RestController
+@RequestMapping("/razorpay")
+
+public class RazorpayController {
+
+}

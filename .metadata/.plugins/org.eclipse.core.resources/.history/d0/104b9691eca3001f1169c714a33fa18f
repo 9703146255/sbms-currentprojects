@@ -1,0 +1,44 @@
+package in.thiru.service;
+
+import java.util.HashMap;
+
+import org.springframework.beans.factory.annotation.Value;
+
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
+
+public class CustomerService {
+
+	@Value("${razorpay.key.id}")
+	private String razorpayKeyId;
+
+	@Value("${razorpay.key.secret}")
+	private String razorpayKeySecret;
+
+	// Method to create a Razorpay order
+	public Order createOrder(int amountInPaise) throws RazorpayException {
+		RazorpayClient client = new RazorpayClient(razorpayKeyId, razorpayKeySecret);
+
+		Map<String, Object> options = new HashMap<>();
+		options.put("amount", amountInPaise); // Amount in paise (1 INR = 100 paise)
+		options.put("currency", "INR");
+		options.put("receipt", "txn123456"); // Unique receipt number (optional)
+
+		// Create an order with Razorpay
+		Order order = client.orders.create(options);
+		return order;
+	}
+
+	// Method to verify Razorpay payment signature
+	public boolean verifyPaymentSignature(String payload, String razorpaySignature) {
+		// Razorpay provides a utility to verify the payment signature
+		try {
+			RazorpayClient client = new RazorpayClient(razorpayKeyId, razorpayKeySecret);
+			return client.verifyPaymentSignature(payload, razorpaySignature);
+		} catch (RazorpayException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+}

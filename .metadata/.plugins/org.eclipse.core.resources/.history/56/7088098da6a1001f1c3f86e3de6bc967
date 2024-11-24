@@ -1,0 +1,16 @@
+package in.thiru.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
+public class Employee {
+	
+	 	@Id
+	    private Long id;
+	    private String name;
+	    private String department;
+	    private String designation;
+	    private double salary;
+
+}
